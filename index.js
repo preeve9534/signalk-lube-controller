@@ -32,6 +32,8 @@ module.exports = function(app) {
 	plugin.description = "Lube controller.";
 
     const log = new Log(app.setProviderStatus, app.setProviderError, plugin.id);
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+    var child_process = require("child_process");
 
 	plugin.schema = function() {
         return(Schema.createSchema(PLUGIN_SCHEMA_FILE).getSchema());
@@ -48,46 +50,36 @@ module.exports = function(app) {
     // comparator.  
     //  
 	plugin.start = function(options) {
-        if (options.paths !== undefined) log.N("monitoring " + options.paths.length + " path" + ((options.paths.length == 1)?"":"s"));
-		unsubscribes = (options.paths || [])
-        .reduce((a, {
-            path,
-            options,
-            message,
-            prefix,
-            lowthreshold,
-            highthreshold
-        }) => {
-            if (options.includes("enabled")) { 
-			    var stream = app.streambundle.getSelfStream(path)
-			    a.push(stream.map(value => {
-                    var retval = 0;
-                    if (lowthreshold) lowthreshold['actual'] = value;
-                    if (highthreshold) highthreshold['actual'] = value;
-			        if ((lowthreshold) && (lowthreshold.value) && (value < lowthreshold.value)) {
-                        retval = -1;
-				    } else if ((highthreshold) && (highthreshold.value) && (value > highthreshold.value)) {
-                        retval = 1;
-				    }
-                    return(retval);
-			    }).skipDuplicates().onValue(test => {
-                    var npath = NOTIFICATION_PREFIX + ((prefix == "none")?"":prefix) + path;
-                    var nactual = (lowthreshold)?lowthreshold.actual:highthreshold.actual;
-                    if (test == 0) {
-                        var notification = app.getSelfPath(npath);
-                        if (notification != null) {
-                            //log.N(nactual + " => cancelling '" + notification.value.state + "' notification on '" + npath + "'", false);
-                            //cancelNotification(npath);
-                        }
+        if (options.enablingpaths !== undefined) log.N("monitoring " + options.enablingpaths.length + " path" + ((options.enablingpaths.length == 1)?"":"s"));
+        var paths = options.enablingpaths.filter(v => v.options.includes("enabled"));
+        var streams = paths.map(v => app.streambundle.getSelfStream(v.path).skipDuplicates());
+        var child = null;
+
+        Bacon.combineWith(orAll, streams).onValue(state => {
+            if (state) {
+                child = child_process.fork(__dirname + "/process.js");
+                child.send({
+                    "firstdelay": options.processoptions.first.delay,
+                    "firstduration": options.processoptions.first.duration,
+                    "subsequentdelay": options.processoptions.subsequent.delay,
+                    "subsequentduration": options.processoptions.subsequent.duration
+                });
+                child.on('message', (message) => {
+                    console.log("Process received message from child " + JSON.stringify(message));
+                    if (message.action) {
+                        issueNotificationUpdate(options.processpath);
                     } else {
-                        var nstate = (test == -1)?lowthreshold.state:highthreshold.state;
-                        log.N(nactual + " => issuing '" + nstate + "' notification on '" + npath + "'", false);
-			            issueNotificationUpdate(test, npath, message, lowthreshold, highthreshold);
+                        cancelNotification(options.processpath);
                     }
-			    }));
+                });
+                child.on('exit', () => {
+                    cancelNotification();
+                    child = null;
+                });
+            } else {
+                if (child != null) child.kill('SIGHUP');
             }
-            return(a);
-		}, []);
+        });
 	}
 
 	plugin.stop = function() {
@@ -101,23 +93,20 @@ module.exports = function(app) {
         return;
     }
 
-	function issueNotificationUpdate(test, npath, message, lowthreshold, highthreshold) {
-        var notificationValue = null;
+	function issueNotificationUpdate(npath) {
         var date = (new Date()).toISOString();
+        var notificationValue = { "state": "alert", "message": "Lubrication process", "method": "visual", "date": date };
 		var delta = { "context": "vessels." + app.selfId, "updates": [ { "source": { "label": "self.notificationhandler" }, "values": [ { "path": npath, "value": notificationValue } ] } ] };
-		var vessel = app.getSelfPath("name");
-        var state = ((test == 1)?highthreshold:lowthreshold).state;
-        var method = ((test == 1)?highthreshold:lowthreshold).method;
-        var value = ((test == 1)?highthreshold:lowthreshold).actual;
-        var threshold = ((test == 1)?highthreshold:lowthreshold).value;
-		var comp = (test == 1)?"above":"below";
-        var action = (state == "normal")?"stopping":"starting";
-		message = (message)?eval("`" + message + "`"):"";
-        notificationValue = { "state": state, "message": message, "method": method, "timestamp": date };
         delta.updates[0].values[0].value = notificationValue;
 		app.handleMessage(plugin.id, delta);
         return;
 	}
+
+    function orAll() {
+        var retval = false;
+        for (var i = 0; i < arguments.length; i++) { retval |= (arguments[i].state == "alert") };
+        return(retval);
+    }
 
 	return(plugin);
 }

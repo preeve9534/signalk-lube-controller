@@ -2,13 +2,27 @@
 	"type": "object",
 	"properties": {
 		"enablingpaths": {
-            "type": "array",
             "title": "",
+            "type": "array",
+            "default": [ { "path": "", "options": [ "enabled" ] } ],
             "items": {
-                "type": "object"
-                
-			"type": "string",
-			"title": "Notification path which enables this controller"
+                "type": "object",
+                "properties": {
+                    "path": {
+			            "type": "string",
+			            "title": "Notification path which enables this controller"
+                    },
+                    "options": {
+                        "title": "",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [ "enabled" ]
+                        },
+                        "uniqueItems": true
+                    }
+                }
+            }
 		},
         "processpath": {
             "type": "string",
@@ -20,7 +34,7 @@
             "properties": {
                 "first": {
                     "type": "object",
-                    "title": "",
+                    "title": "Options for first process invocation",
                     "properties": {
                         "delay": {
                             "title": "Delay first operation by (seconds)",
@@ -34,7 +48,7 @@
                 },
                 "subsequent": {
                     "type": "object",
-                    "title": "",
+                    "title": "Options for subsequent process invocations",
                     "properties": {
                         "options": {
                             "title": "Perform subsequent operations",

@@ -19,8 +19,8 @@
         "classNames": "col-sm-12"
     }, 
     "processoptions": {
+        "classNames": "col-sm-12",
         "first": {
-            "title": "",
             "classNames": "col-sm-12",
             "delay": {
                 "classNames": "col-sm-6"
@@ -30,6 +30,16 @@
             }
         },
         "subsequent": {
+            "classNames": "col-sm-12",
+            "options": {
+                "classNames": "col-sm-12",
+                "ui:widget": {
+                    "component": "checkboxes",
+                    "options": {
+                        "inline": true
+                    }
+                }
+            },
             "delay": {
                 "classNames": "col-sm-6"
             },
