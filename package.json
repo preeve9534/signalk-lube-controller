@@ -1,0 +1,25 @@
+{
+  "name": "signalk-lube-controller",
+  "version": "1.0.0",
+  "description": "Process control for lubrication pump",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/preeve9534/signalk-lube-controller.git"
+  },
+  "keywords": [
+    "signalk",
+    "process",
+    "controller",
+    "signalk-node-server-plugin"
+  ],
+  "author": "Paul Reeve",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/preeve9534/signalk-lube-controller/issues"
+  },
+  "homepage": "https://github.com/preeve9534/signalk-lube-controller#readme"
+}

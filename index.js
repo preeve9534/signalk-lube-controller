@@ -27,9 +27,9 @@ module.exports = function(app) {
 	var plugin = {};
 	var unsubscribes = [];
 
-	plugin.id = "threshold-notifier";
-	plugin.name = "Threshold notifier";
-	plugin.description = "Issue notifications when a path value goes outside defined limits.";
+	plugin.id = "lube-controller";
+	plugin.name = "Lube controller";
+	plugin.description = "Lube controller.";
 
     const log = new Log(app.setProviderStatus, app.setProviderError, plugin.id);
 

@@ -2,58 +2,59 @@
 	"type": "object",
 	"properties": {
 		"enablingpaths": {
-			"type": "array",
-            "title": "Notification paths which enable this controller",
-			"items": {
-                "title": "",
-				"type": "object",
-                "required": [ "path" ],
-				"properties": {
-					"path": {
-						"title": "Notification path",
-						"type": "string"
-					},
-                    "options": {
-                        "title": "Options",
-                        "type": "array",
-                        "default": [ "enabled" ],
-                        "items": {
-                            "type": "string",
-                            "enum": [ "enabled" ],
-                            "enumNames": [ "Enabled?" ]
-                        },
-                        "uniqueItems": true
-                    }
-                }
-			}
-            
+            "type": "array",
+            "title": "",
+            "items": {
+                "type": "object"
+                
+			"type": "string",
+			"title": "Notification path which enables this controller"
 		},
         "processpath": {
             "type": "string",
             "title": "Notification path which enables process"
         },
-        "control": {
+        "processoptions": {
             "type": "object",
+            "title": "",
             "properties": {
-                "startdelay": {
-                    "title": "Start delay",
-                    "type": "number"
+                "first": {
+                    "type": "object",
+                    "title": "",
+                    "properties": {
+                        "delay": {
+                            "title": "Delay first operation by (seconds)",
+                            "type": "number"
+                        },
+                        "duration": {
+                            "title": "Perform first operation for (seconds)",
+                            "type": "number"
+                        }
+                    }
                 },
-                "firstduration": {
-                    "title": "Duration of first activation",
-                    "type": "number"
-                },
-                "subsequentactivations": {
-                    "title": "Number of subsequent activations",
-                    "type": "number"
-                },
-                "subsequentdelay": {
-                    "title": "Delay between subsequent activations",
-                    "type": "number"
-                },
-                "subsequentduration": {
-                    "title": "Duration of subsequent activations",
-                    "type": "number"
+                "subsequent": {
+                    "type": "object",
+                    "title": "",
+                    "properties": {
+                        "options": {
+                            "title": "Perform subsequent operations",
+                            "type": "array",
+                            "default": [ "indefinitely" ],
+                            "items": {
+                                "type": "string",
+                                "enum": [ "never", "indefinitely" ]
+                            },
+                            "uniqueItems": true
+                        },
+                        "delay": {
+                            "title": "Delay between subsequent operations by (seconds)",
+                            "type": "number"
+                        },
+                        "duration": {
+                            "title": "Perform subsequent operations for (seconds)",
+                            "type": "number"
+                        }
+                    }
                 }
             }
         }
