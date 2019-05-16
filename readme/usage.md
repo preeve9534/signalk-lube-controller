@@ -1,31 +1,30 @@
 ## Usage
 
- __signalk-threshold-notifier__ is configured through the Signal K Node server
+ __signalk-process-scheduler__ is configured through the Signal K Node server
 plugin configuration interface.
-Navigate to _Server_->_Plugin config_ and select the _Threshold notifier_ tab.
+Navigate to _Server_->_Plugin config_ and select the _Process scheduler_ tab.
 
 ![Configuration panel](readme/config.png)
 
-The plugin configuration consists of a list of rules, each of which specifies
-a Signal K path which should be monitored, upper and lower limits against
-which notifications should be raised and the attributes of such notifications.
-On first use the list of monitored paths will be empty.
+The plugin configuration consists of a list of scheduled processes each of which
+is represented by a tab.  Clicking on a tab opens the configuration for the
+selected process.
 
-New rules can be added by clicking the __[+]__ button and any existing,
-unwanted, rules can be deleted by clicking their adjacent __[x]__ button.
+New processes can be added by clicking the __[+]__ button and any existing,
+unwanted, processes can be deleted by clicking their adjacent __[x]__ button.
 
-Each rule includes the following fields.
+Each process configuration includes the following fields.
 
-__Monitored path__  
-A required text value which specifies the Signal K Node server path which
-should be monitored.
+__Process name__  
+A required text value which names the process.
 There is no default value.
 
-Enter here the full Signal K path for the value which you would like to
-monitor, for example, "tanks.wasteWater.0.currentValue".
+Enter here some text which identifies the process and which will make sense when
+it appears in system log file messages.
 
-__Options->Enabled?__  
-Whether or not to process this rule.
+__Notification path which enables this controller__  
+One or more notification paths which will act as triggers for running the associated
+process.Whether or not to process this rule.
 Default value is yes (checked).
 
 __Notification message__  
