@@ -9,17 +9,17 @@ as a three-phase life cycle consisting of a start phase followed by an iterative
 phase and terminating with an end phase.  Any (or all) phases can be omitted
 from scheduler control.
 
-![alt text](readme/processcontrol.png)
-
 Each phase is characterised by a user-defined delay and duration.  The delay is
 a period of quiescence before the controlled process is started, whilst duration
 is the process execution time within the containing phase.
 
-Scheduled control of a particular process is initiated and terminated by the
-appearance of one or more user-defined notifications on the Signal K server bus and
-the scheduler emits user-defined notifications to signal operation of each
-process.
+![alt text](readme/processcontrol.png)
 
+Scheduled control of a particular process is initiated by the appearance of one
+or more user-defined ALERT notifications on the Signal K server bus.  Removal of
+the notification (or its replacement by a non-ALERT variant) signals the scheduler
+to relinquish process sheduling by entering the end phase of process control. 
+:
 Signalk-process-scheduler was developed to control a stern gland lubrication
 pump and this activity is configured in the following way:
 
