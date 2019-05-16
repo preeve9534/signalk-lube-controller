@@ -2,8 +2,6 @@
 
 __Stern gland lubrication__
 
-signalk-process-scheduler was developed to schedule running of _Beatrice_'s stern gland lubrication pump.
-
 _Beatrice_'s lubrication pump was originally connected directly to the engine ignition circuit and had a 100% duty cycle which was slowly and unnecessarily filling the engine-room bilge with grease.  I guessed that a duty cycle closer to 5% would be more than adequate and finally settled on a strategy of lubricating the prop shaft heavily at engine start and then with little bursts of lubrication whilst the engine was running.
 
 To achieve this in hardware I required a process control timer module for my lubrication pump and since this was priced at 200 euros I thought maybe not.  I then considered using a cheap central-heating programmer but didn't like the inevitable awkwardness of this solution.
