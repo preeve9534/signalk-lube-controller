@@ -2,18 +2,18 @@
 	"type": "object",
 	"properties": {
         "processes": {
-            "title": "Controlled processes",
+            "title": "Scheduled processes",
             "type": "array",
             "items": {
-                "title": "Controlled process",
+                "title": "Scheduled process",
                 "type": "object",
                 "properties": {
                     "name": {
-                        "title": "Process name",
+                        "title": "Scheduled process name",
                         "type": "string"
                     },  
 		            "enablingpaths": {
-                        "title": "",
+                        "title": "Notification paths which enable process scheduling",
                         "type": "array",
                         "default": [ { "path": "", "options": [ "enabled" ] } ],
                         "items": {
@@ -21,7 +21,7 @@
                             "properties": {
                                 "path": {
 			                        "type": "string",
-			                        "title": "Notification path which enables this controller"
+			                        "title": "path"
                                 },
                                 "options": {
                                     "title": "",
