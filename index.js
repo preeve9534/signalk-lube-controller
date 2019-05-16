@@ -50,36 +50,47 @@ module.exports = function(app) {
     // comparator.  
     //  
 	plugin.start = function(options) {
-        if (options.enablingpaths !== undefined) log.N("monitoring " + options.enablingpaths.length + " path" + ((options.enablingpaths.length == 1)?"":"s"));
-        var paths = options.enablingpaths.filter(v => v.options.includes("enabled"));
-        var streams = paths.map(v => app.streambundle.getSelfStream(v.path).skipDuplicates());
-        var child = null;
-
-        Bacon.combineWith(orAll, streams).onValue(state => {
-            if (state) {
-                child = child_process.fork(__dirname + "/process.js");
-                child.send({
-                    "firstdelay": options.processoptions.first.delay,
-                    "firstduration": options.processoptions.first.duration,
-                    "subsequentdelay": options.processoptions.subsequent.delay,
-                    "subsequentduration": options.processoptions.subsequent.duration
-                });
-                child.on('message', (message) => {
-                    console.log("Process received message from child " + JSON.stringify(message));
-                    if (message.action) {
-                        issueNotificationUpdate(options.processpath);
-                    } else {
-                        cancelNotification(options.processpath);
-                    }
-                });
-                child.on('exit', () => {
-                    cancelNotification();
-                    child = null;
-                });
-            } else {
-                if (child != null) child.kill('SIGHUP');
-            }
-        });
+        if (options.processes !== undefined) log.N("Controlling " + options.processes.length + " process" + ((options.processes.length == 1)?"":"es"));
+        
+        options.processes.reduce((a, {
+            name,
+            enablingpaths,
+            processpath,
+            processoptions
+        }) => {
+            var stream = Bacon.combineWith(orAll, enablingpaths.filter(v => v.options.includes("enabled")).map(v => app.streambundle.getSelfStream(v.path).skipDuplicates()));
+            a.push(stream.onValue(state => {
+                if (state) {
+                    var child = child_process.fork(__dirname + "/process.js");
+                    console.log(JSON.stringify(processoptions));
+                    child.send({
+                        "sdl" : (processoptions.options.includes("start"))?processoptions.start.delay:0,
+                        "sdr" : (processoptions.options.includes("start"))?processoptions.start.duration:0,
+                        "idl" : (processoptions.options.includes("iterate"))?processoptions.iterate.delay:0,
+                        "idr" : (processoptions.options.includes("iterate"))?processoptions.iterate.duration:0,
+                        "edl" : (processoptions.options.includes("end"))?processoptions.end.delay:0,
+                        "edr" : (processoptions.options.includes("end"))?processoptions.end.duration:0
+                    });
+                    child.on('message', (message) => {
+                        if (message.action) {
+                            log.N("starting " + name);
+                            issueNotificationUpdate(processpath);
+                        } else {
+                            log.N("stopping " + name);
+                            cancelNotification(processpath);
+                        }
+                    });
+                    child.on('exit', () => {
+                        log.N("terminating " + name);
+                        cancelNotification(processpath);
+                        child = null;
+                    });
+                } else {
+                    if (child != null) child.kill('SIGHUP');
+                }
+            }));
+            return(a);
+        }, []);
 	}
 
 	plugin.stop = function() {

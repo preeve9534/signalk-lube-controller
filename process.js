@@ -1,27 +1,30 @@
+var edl = 0;
+var edr = 0;
+
 process.on('message', (message) => {
     console.log('[child] received message from server:');
-    var delay = message.firstdelay + 1;
-    var duration = message.firstduration + 1;
+    edl = message.edl;
+    edr = message.edr;
 
-    setTimeout(doit, (delay * 1000), duration, message.subsequentdelay + 1, message.subsequentduration + 1);
+    setTimeout(startstart, (((message.sdl == 0)?1:message.sdl) * 1000), message.sdr, message.idl, message.idr);
 });
 
-function doit(duration, sdelay, sduration) {
-    process.send({ "action": true });
-    setTimeout(stopit, (duration * 1000), sdelay, sduration);
+function startstart(sdr, idl, idr) {
+    if (sdr != 0) process.send({ "action": true });
+    setTimeout(startstop, (((sdr == 0)?1:sdr) * 1000), idl, idr);
 }
 
-function stopit(delay, duration) {
+function startstop(idl, idr) {
     process.send({ "action": false });
-    setInterval(subsequent, (delay * 1000), duration);
+    setInterval(intervalstart, (((idl == 0)?1:idl) * 1000), idr);
 }
 
-function subsequent(duration) {
-    process.send({ "action": true });
-    setTimeout(stop, (duration * 1000));
+function intervalstart(idr) {
+    if (idr != 0) process.send({ "action": true });
+    setTimeout(intervalstop, (((idr == 0)?1:idr) * 1000));
 }
 
-function stop() {
+function intervalstop() {
     process.send({ "action": false });
 }
 

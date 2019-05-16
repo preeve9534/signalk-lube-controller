@@ -1,72 +1,99 @@
 {
 	"type": "object",
 	"properties": {
-		"enablingpaths": {
-            "title": "",
+        "processes": {
+            "title": "Controlled processes",
             "type": "array",
-            "default": [ { "path": "", "options": [ "enabled" ] } ],
             "items": {
+                "title": "Controlled process",
                 "type": "object",
                 "properties": {
-                    "path": {
-			            "type": "string",
-			            "title": "Notification path which enables this controller"
-                    },
-                    "options": {
+                    "name": {
+                        "title": "Process name",
+                        "type": "string"
+                    },  
+		            "enablingpaths": {
                         "title": "",
                         "type": "array",
+                        "default": [ { "path": "", "options": [ "enabled" ] } ],
                         "items": {
-                            "type": "string",
-                            "enum": [ "enabled" ]
-                        },
-                        "uniqueItems": true
-                    }
-                }
-            }
-		},
-        "processpath": {
-            "type": "string",
-            "title": "Notification path which enables process"
-        },
-        "processoptions": {
-            "type": "object",
-            "title": "",
-            "properties": {
-                "first": {
-                    "type": "object",
-                    "title": "Options for first process invocation",
-                    "properties": {
-                        "delay": {
-                            "title": "Delay first operation by (seconds)",
-                            "type": "number"
-                        },
-                        "duration": {
-                            "title": "Perform first operation for (seconds)",
-                            "type": "number"
+                            "type": "object",
+                            "properties": {
+                                "path": {
+			                        "type": "string",
+			                        "title": "Notification path which enables this controller"
+                                },
+                                "options": {
+                                    "title": "",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [ "enabled" ]
+                                    },
+                                    "uniqueItems": true
+                                }
+                            }
                         }
-                    }
-                },
-                "subsequent": {
-                    "type": "object",
-                    "title": "Options for subsequent process invocations",
-                    "properties": {
-                        "options": {
-                            "title": "Perform subsequent operations",
-                            "type": "array",
-                            "default": [ "indefinitely" ],
-                            "items": {
-                                "type": "string",
-                                "enum": [ "never", "indefinitely" ]
+		            },
+                    "processpath": {
+                        "type": "string",
+                        "title": "Notification path which enables process"
+                    },
+                    "processoptions": {
+                        "type": "object",
+                        "title": "",
+                        "properties": {
+                            "options": {
+                                "title": "Active process components",
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [ "start", "iterate", "end" ]
+                                },
+                                "uniqueItems": true
                             },
-                            "uniqueItems": true
-                        },
-                        "delay": {
-                            "title": "Delay between subsequent operations by (seconds)",
-                            "type": "number"
-                        },
-                        "duration": {
-                            "title": "Perform subsequent operations for (seconds)",
-                            "type": "number"
+                            "start": {
+                                "type": "object",
+                                "title": "Options for start process invocation",
+                                "properties": {
+                                    "delay": {
+                                        "title": "Delay start process invocation by (seconds)",
+                                        "type": "number"
+                                    },
+                                    "duration": {
+                                        "title": "Perform start process for (seconds)",
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                            "iterate": {
+                                "type": "object",
+                                "title": "Options for iterating process invocations",
+                                "properties": {
+                                    "delay": {
+                                        "title": "Delay iterative process invocations by (seconds)",
+                                        "type": "number"
+                                    },
+                                    "duration": {
+                                        "title": "Perform iterative process for (seconds)",
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                            "end": {
+                                "type": "object",
+                                "title": "Options for end process invocation",
+                                "properties": {
+                                    "delay": {
+                                        "title": "Delay end process invocation by (seconds)",
+                                        "type": "number"
+                                    },
+                                    "duration": {
+                                        "title": "Perform end process for (seconds)",
+                                        "type": "number"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
