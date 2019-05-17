@@ -2,11 +2,41 @@
 
 __Stern gland lubrication__
 
-_Beatrice_'s lubrication pump was originally connected directly to the engine ignition circuit and had a 100% duty cycle which was slowly and unnecessarily filling the engine-room bilge with grease.  I guessed that a duty cycle closer to 5% would be more than adequate and finally settled on a strategy of lubricating the prop shaft heavily at engine start and then with little bursts of lubrication whilst the engine was running.
+_Background_
 
-To achieve this in hardware I required a process control timer module for my lubrication pump and since this was priced at 200 euros I thought maybe not.  I then considered using a cheap central-heating programmer but didn't like the inevitable awkwardness of this solution.
+_Beatrice_ was built with an electric lubrication pump which delivers grease
+directly to the propeller shaft inboard bearing and stern gland.
+The pump was installed so that it operated continuously whilst the engine
+ignition switch was in the RUN position and so had a 100% duty cycle.
 
-Since I happened to have an unused channel on my engine-room NMEA 2000 relay output module which could be used to modulate power to the lubrication pump all that was really needed was some Signal K logic to make things happen sensibly.  Using Signal K had the additional benefit of giving me access to data from my stern-gland temperature sensor as a subsidiary control mechanism.
+_Problem_
+
+Although the lubrication pump was set to its minimum delivery rate, over the
+course of a day's cruise an excessive ammount of grease (around 80cc) was
+being forced through the stern gland and out into the engine-room bilge.
+
+A typical (and perfectly effective) manual lubrication system would deliver a
+maximum of just one or two cubic centimetres of grease over a similar timescale.
+
+_Requirement_
+
+Given that the lubrication pump was configured to its minimum delivery rate,
+reducing the quantity of grease arriving at the stern gland can only be achieved
+by modulating the operation of the lubrication pump, so the general requirement
+of "pump less grease" becomes: modulate the running of the lubrication pump to
+reduce the lubrication duty-cycle.
+
+It would also be helpful if the problem solution allowed easy tweaking of the
+duty cycle to suit operational need.
+
+_Solutions considered_
+
+Process control timers suitable for duty cycle management are readily
+available - similar to a central-heating programmer their normal application
+is to control a relay which is often used simply to interrupt the power supply
+to a connected device.
+
+Home-brew scheduler embedded in thSince I happened to have an unused channel on my engine-room NMEA 2000 relay output module which could be used to modulate power to the lubrication pump all that was really needed was some Signal K logic to make things happen sensibly.  Using Signal K had the additional benefit of giving me access to data from my stern-gland temperature sensor as a subsidiary control mechanism.
 
 This set the scene for the development of signalk-process-scheduler.  I use the plugin to solve the lubrication problem in the following way.
 
