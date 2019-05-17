@@ -27,9 +27,9 @@ module.exports = function(app) {
 	var plugin = {};
 	var unsubscribes = [];
 
-	plugin.id = "lube-controller";
-	plugin.name = "Lube controller";
-	plugin.description = "Lube controller.";
+	plugin.id = "process-scheduler";
+	plugin.name = "Process scheduler";
+	plugin.description = "Simple process scheduler.";
 
     const log = new Log(app.setProviderStatus, app.setProviderError, plugin.id);
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
