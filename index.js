@@ -21,7 +21,6 @@ const Log = require('./lib/log.js');
 
 const PLUGIN_SCHEMA_FILE = __dirname + "/schema.json";
 const PLUGIN_UISCHEMA_FILE = __dirname + "/uischema.json";
-const NOTIFICATION_PREFIX = "notifications.";
 
 module.exports = function(app) {
 	var plugin = {};
@@ -50,29 +49,25 @@ module.exports = function(app) {
     // comparator.  
     //  
 	plugin.start = function(options) {
-        if (options.processes !== undefined) log.N("Controlling " + options.processes.length + " process" + ((options.processes.length == 1)?"":"es"));
+        if (options.processes === undefined) {
+            log.N("no processes are defined");
+        } else {
+            var enabledProcesses = options.processes.filter(p => (p.enablingpaths.filter(ep => ep.options.includes("enabled")).length > 0));
+            if (enabledProcesses.length == 0) {
+                log.N("no processes are enabled");
+            } else {
+                log.N("configuring scheduling for: " + enabledProcesses.map(p => p.name).join(", "));
         
-        options.processes.reduce((a, {
-            name,
-            enablingpaths,
-            processpath,
-            processoptions
-        }) => {
-            var stream = Bacon.combineWith(orAll, enablingpaths.filter(v => v.options.includes("enabled")).map(v => app.streambundle.getSelfStream(v.path).skipDuplicates()));
-            a.push(stream.onValue(state => {
-                if (state) {
+                enabledProcesses.reduce((a, {
+                    name,
+                    enablingpaths,
+                    processpath,
+                    processoptions
+                }) => {
+                    var stream = Bacon.combineWith(orAll, enablingpaths.filter(v => v.options.includes("enabled")).map(v => app.streambundle.getSelfStream(v.path).skipDuplicates()));
                     var child = child_process.fork(__dirname + "/process.js");
-                    console.log(JSON.stringify(processoptions));
-                    child.send({
-                        "sdl" : (processoptions.options.includes("start"))?processoptions.start.delay:0,
-                        "sdr" : (processoptions.options.includes("start"))?processoptions.start.duration:0,
-                        "idl" : (processoptions.options.includes("iterate"))?processoptions.iterate.delay:0,
-                        "idr" : (processoptions.options.includes("iterate"))?processoptions.iterate.duration:0,
-                        "edl" : (processoptions.options.includes("end"))?processoptions.end.delay:0,
-                        "edr" : (processoptions.options.includes("end"))?processoptions.end.duration:0
-                    });
                     child.on('message', (message) => {
-                        if (message.action) {
+                        if (message.action == 1) {
                             log.N("starting " + name);
                             issueNotificationUpdate(processpath);
                         } else {
@@ -81,17 +76,39 @@ module.exports = function(app) {
                         }
                     });
                     child.on('exit', () => {
-                        log.N("terminating " + name);
-                        cancelNotification(processpath);
+                        log.N("stopping scheduling of: " + name);
                         child = null;
                     });
-                } else {
-                    if (child != null) child.kill('SIGHUP');
-                }
-            }));
-            return(a);
-        }, []);
-	}
+
+                    a.push(stream.onValue(state => {
+                        switch (state) {
+                            case 1:
+                                log.N("starting scheduling of " + name);
+                                if (child != null) {
+                                    child.send({
+                                        "action": "START",
+                                        "sdl" : (processoptions.options.includes("start"))?processoptions.start.delay:0,
+                                        "sdr" : (processoptions.options.includes("start"))?processoptions.start.duration:0,
+                                        "idl" : (processoptions.options.includes("iterate"))?processoptions.iterate.delay:0,
+                                        "idr" : (processoptions.options.includes("iterate"))?processoptions.iterate.duration:0,
+                                        "edl" : (processoptions.options.includes("end"))?processoptions.end.delay:0,
+                                        "edr" : (processoptions.options.includes("end"))?processoptions.end.duration:0
+                                    });
+                                }
+                                break;
+                            case 0:
+                                log.N("stopping scheduling of " + name);
+                                if (child != null) {
+                                    child.send({ "action": "STOP" });
+                                }
+                                break;
+                        }
+                    }));
+                    return(a);
+                }, []);
+            }
+	    }
+    }
 
 	plugin.stop = function() {
 		unsubscribes.forEach(f => f())
@@ -113,6 +130,12 @@ module.exports = function(app) {
         return;
 	}
 
+    /**
+     * Returns the logical OR of an arbitrary number of Signal K notification
+     * values where the value of the state field is interpreted as TRUE if
+     * equal to "alert", otherwise FALSE.
+     * returns: TRUE or FALSE
+     */
     function orAll() {
         var retval = false;
         for (var i = 0; i < arguments.length; i++) { retval |= (arguments[i].state == "alert") };
