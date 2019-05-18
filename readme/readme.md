@@ -4,7 +4,7 @@ This [Signal K Node Server](https://github.com/SignalK/signalk-server-node)
 plugin implements a simple process scheduler using the Signal K notification
 system as its control medium.
 
-An arbitrary number of _schedule tasks_s can be configured.
+An arbitrary number of _schedule task_ processes can be configured.
 Each schedule task is modelled as a three-phase life-cycle consisting of a
 start phase followed by an iterative phase and terminating with an end phase.
 Any (or all) phases can be excluded from the schedule task life-cycle.
