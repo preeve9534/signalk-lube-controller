@@ -6,10 +6,10 @@ Navigate to _Server_->_Plugin config_ and select the _Process scheduler_ tab.
 
 ![Configuration panel](readme/config.png)
 
-Plugin configuration simply involves maintaining a list of definitions,
-each of which represents a scheduled process.  Each process definition
-is represented by a tab in the configuration screen: clicking on a tab
-opens the definition for the selected process.
+Plugin configuration involves maintaining a list of schedule task
+configurations each of which is represented by a tab in the plugin
+configuration panel: clicking on a tab opens the configuration panel for the
+selected schedule task.
 
 New processes definitions can be added by clicking the __[+]__ button
 and any existing, unwanted, process definitions can be deleted by clicking

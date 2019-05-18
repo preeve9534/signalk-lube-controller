@@ -1,6 +1,7 @@
 {
     "processes": {
         "items": {
+            "ui:title": "Fred",
             "classNames": "col-sm-12",
             "ui:field": "collapsible",
             "collapse": {
