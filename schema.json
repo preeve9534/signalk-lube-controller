@@ -2,18 +2,18 @@
 	"type": "object",
 	"properties": {
         "processes": {
-            "title": "Scheduled processes",
+            "title": "Schedule tasks",
             "type": "array",
             "items": {
-                "title": "Scheduled process",
+                "title": "Schedule task",
                 "type": "object",
                 "properties": {
                     "name": {
-                        "title": "Scheduled process name",
+                        "title": "Schedule task name",
                         "type": "string"
                     },  
 		            "enablingpaths": {
-                        "title": "Notification paths which enable process scheduling",
+                        "title": "Notification paths which enable the schedule task",
                         "type": "array",
                         "default": [ { "path": "", "options": [ "enabled" ] } ],
                         "items": {
@@ -37,14 +37,14 @@
 		            },
                     "processpath": {
                         "type": "string",
-                        "title": "Notification path which enables process"
+                        "title": "Notification path which enables the scheduled process"
                     },
                     "processoptions": {
                         "type": "object",
                         "title": "",
                         "properties": {
                             "options": {
-                                "title": "Active process components",
+                                "title": "Execute these schedule task phases",
                                 "type": "array",
                                 "items": {
                                     "type": "string",
@@ -54,42 +54,42 @@
                             },
                             "start": {
                                 "type": "object",
-                                "title": "Options for start process invocation",
+                                "title": "Options for start phase",
                                 "properties": {
                                     "delay": {
-                                        "title": "Delay start process invocation by (seconds)",
+                                        "title": "delay (seconds)",
                                         "type": "number"
                                     },
                                     "duration": {
-                                        "title": "Perform start process for (seconds)",
+                                        "title": "duration (seconds)",
                                         "type": "number"
                                     }
                                 }
                             },
                             "iterate": {
                                 "type": "object",
-                                "title": "Options for iterating process invocations",
+                                "title": "Options for iterate phase",
                                 "properties": {
                                     "delay": {
-                                        "title": "Delay iterative process invocations by (seconds)",
+                                        "title": "delay (seconds)",
                                         "type": "number"
                                     },
                                     "duration": {
-                                        "title": "Perform iterative process for (seconds)",
+                                        "title": "duration (seconds)",
                                         "type": "number"
                                     }
                                 }
                             },
                             "end": {
                                 "type": "object",
-                                "title": "Options for end process invocation",
+                                "title": "Options for end phase",
                                 "properties": {
                                     "delay": {
-                                        "title": "Delay end process invocation by (seconds)",
+                                        "title": "delay (seconds)",
                                         "type": "number"
                                     },
                                     "duration": {
-                                        "title": "Perform end process for (seconds)",
+                                        "title": "duration (seconds)",
                                         "type": "number"
                                     }
                                 }
