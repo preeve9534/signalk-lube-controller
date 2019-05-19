@@ -1,6 +1,5 @@
 /*
  * Copyright 2018 Paul Reeve <paul@pdjr.eu>
- * Portions Copyright (2017) Scott Bender (see https://github.com/sbender9/signalk-simple-notifications)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
