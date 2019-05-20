@@ -1,5 +1,4 @@
-## Use cases
-
+## Use cases 
 __Stern gland lubrication__
 
 _Background_
@@ -53,19 +52,23 @@ input modules.
 [signalk-threshold-notifier](https://github.com/preeve9534/signalk-threshold-notifier/)
 converts this switch signal into a Signal K ALERT notification which is in turn
 used to activate the lubrication process scheduler.
-In this way, the scheduler runs the process when the ignition switch is in position I
-(RUN) and otherwise not.
-I also use _signalk-threshold-notifier_ to generate an ALERT notification when my
-stern gland temperature exceeds 60C and then use this to start the lubrication
-schedule too.
+In this way, the scheduler runs the process when the ignition switch is in
+position I (RUN) and otherwise not.
+I also use _signalk-threshold-notifier_ to generate an ALERT notification when
+my stern gland temperature exceeds 60C and then use this to start the
+lubrication schedule too.
 
-In the lubrication process scheduler configuration start (delay = 0s, duration = 300s)
-and iterative phases (delay = 1800s, duration = 120s) are defined: the intention here
-is that when the ignition switch is turned on the lubrication pump will immediately
-run for five minutes and will then run for two minutes every thirty minutes.
+In the lubrication process scheduler configuration start (delay = 0s,
+duration = 300s) and iterative phases (delay = 1800s, duration = 120s) are
+defined: the intention here is that when the ignition switch is turned on the
+lubrication pump will immediately run for five minutes and will then run for
+two minutes every thirty minutes.
 
-The configuration also specifies that the scheduler should emit a 'notifications.control.shaftlubepump'
-ALERT notification to signal operation of the pump.
-This notification is translated into operation of the engine-room relay by
-[signalk-switchbank](https://github.com/preeve9534/signalk-switchbank/)
-which emits NMEA 2000 PGN127502 messages in response to changes in notification state.
+The configuration also specifies the ALERT notification that will be used to
+signal operation of the pump.
+This notification is translated by
+[signalk-switchbank](https://github.com/preeve9534/signalk-switchbank2/)
+which emits NMEA 2000 PGN127502 messages to change the state of the engine
+room relay.
+
+[plugin configuration file](./readme/plugin-config-data/process-scheduler.json)
