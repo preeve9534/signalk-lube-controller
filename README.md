@@ -2,15 +2,16 @@
 
 This [Signal K Node Server](https://github.com/SignalK/signalk-server-node)
 plugin implements a simple process scheduler which uses the Signal K
-notification system both as its own control interface and as the instrument
+notification system as both its own control interface and as the instrument
 for operating external processes.
 
 To achieve agency in the real world the scheduler is dependent upon other
-plugins which can map real world events into notifications and notifications
-into real world actions. 
+plugins which can map real world events into Signal K notifications and
+Signal K notifications into real world actions. 
 
-The plugin manages an arbitrary number of user defined _tasks_.
-A task is started by the appearance of a user defined ALERT notification ons
+__signalk-process-scheduler__ manages an arbitrary number of user defined
+_tasks_.
+A task is started by the appearance of a nominated ALERT notification on
 the Signal K notification bus and is stopped by the removal of this
 notification. 
 
@@ -85,6 +86,9 @@ handles just a shaft librication task might look like this.
   ]
 }
 ```
+
+Of course, __signalk-process-scheduler__ provides a convenient web interface
+for generation of its configuration files.
 ## System requirements
 
 __signalk-process-scheduler__ has no special system requirements.

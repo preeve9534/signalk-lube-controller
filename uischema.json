@@ -1,5 +1,5 @@
 {
-    "processes": {
+    "tasks": {
         "items": {
             "classNames": "col-sm-12",
             "ui:field": "collapsible",
@@ -27,7 +27,7 @@
                     }
                 }
             },
-            "phases": {
+            "activities": {
                 "classNames": "col-sm-12",
                 "items": {
                     "name": {

@@ -1,7 +1,7 @@
 {
 	"type": "object",
 	"properties": {
-        "processes": {
+        "tasks": {
             "title": "Schedule tasks",
             "type": "array",
             "items": {
@@ -35,14 +35,14 @@
                             }
                         }
 		            },
-                    "phases" : {
-                        "title": "Phases making up the schedule task",
+                    "activities" : {
+                        "title": "Activities making up the schedule task",
                         "type": "array",
                         "items": {
                             "type": "object",
                             "properties": {
                                 "name": {
-                                    "title": "Phase name",
+                                    "title": "Activity name",
                                     "type": "string"
                                 },
                                 "path": {

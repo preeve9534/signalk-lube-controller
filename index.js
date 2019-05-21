@@ -48,22 +48,22 @@ module.exports = function(app) {
     // comparator.  
     //  
 	plugin.start = function(options) {
-        if (options.processes === undefined) {
-            log.N("no processes are defined");
+        if (options.tasks === undefined) {
+            log.N("no tasks are defined");
         } else {
-            var enabledProcesses = options.processes.filter(p => (p.enablingpaths.filter(ep => ep.options.includes("enabled")).length > 0));
-            if (enabledProcesses.length == 0) {
-                log.N("no processes are enabled");
+            var enabledTasks = options.tasks.filter(p => (p.enablingpaths.filter(ep => ep.options.includes("enabled")).length > 0));
+            if (enabledTasks.length == 0) {
+                log.N("no tasks are enabled");
             } else {
-                log.N("configuring scheduling for: " + enabledProcesses.map(p => p.name).join(", "));
+                log.N("configuring scheduling for: " + enabledTasks.map(p => p.name).join(", "));
         
-                enabledProcesses.reduce((a, {
+                enabledTasks.reduce((a, {
                     name,
                     enablingpaths,
-                    phases
+                    activities
                 }) => {
                     var stream = Bacon.combineWith(orAll, enablingpaths.filter(v => v.options.includes("enabled")).map(v => app.streambundle.getSelfStream(v.path).skipDuplicates()));
-                    var child = child_process.fork(__dirname + "/process.js");
+                    var child = child_process.fork(__dirname + "/task.js");
                     child.on('message', (message) => {
                         if (message.action == 1) {
                             if (message.path != null) {
@@ -89,7 +89,7 @@ module.exports = function(app) {
                                 if (child != null) {
                                     child.send({
                                         "action": "START",
-                                        "phases": phases
+                                        "activities": activities 
                                     });
                                 }
                                 break;
