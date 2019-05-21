@@ -5,7 +5,7 @@
             "title": "Schedule tasks",
             "type": "array",
             "items": {
-                "title": "New task",
+                "title": "Schedule task",
                 "type": "object",
                 "properties": {
                     "name": {

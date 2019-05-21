@@ -1,0 +1,103 @@
+{
+	"type": "object",
+	"properties": {
+        "processes": {
+            "title": "Schedule tasks",
+            "type": "array",
+            "items": {
+                "title": "Schedule task",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Schedule task name",
+                        "type": "string"
+                    },  
+		            "enablingpaths": {
+                        "title": "Notification paths which enable the schedule task",
+                        "type": "array",
+                        "default": [ { "path": "", "options": [ "enabled" ] } ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+			                        "type": "string",
+			                        "title": "path"
+                                },
+                                "options": {
+                                    "title": "",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [ "enabled" ]
+                                    },
+                                    "uniqueItems": true
+                                }
+                            }
+                        }
+		            },
+                    "processpath": {
+                        "type": "string",
+                        "title": "Notification path which enables the scheduled process"
+                    },
+                    "processoptions": {
+                        "type": "object",
+                        "title": "",
+                        "properties": {
+                            "options": {
+                                "title": "Execute these schedule task phases",
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [ "start", "iterate", "end" ]
+                                },
+                                "uniqueItems": true
+                            },
+                            "start": {
+                                "type": "object",
+                                "title": "Options for start phase",
+                                "properties": {
+                                    "delay": {
+                                        "title": "delay (seconds)",
+                                        "type": "number"
+                                    },
+                                    "duration": {
+                                        "title": "duration (seconds)",
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                            "iterate": {
+                                "type": "object",
+                                "title": "Options for iterate phase",
+                                "properties": {
+                                    "delay": {
+                                        "title": "delay (seconds)",
+                                        "type": "number"
+                                    },
+                                    "duration": {
+                                        "title": "duration (seconds)",
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                            "end": {
+                                "type": "object",
+                                "title": "Options for end phase",
+                                "properties": {
+                                    "delay": {
+                                        "title": "delay (seconds)",
+                                        "type": "number"
+                                    },
+                                    "duration": {
+                                        "title": "duration (seconds)",
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+	}
+}

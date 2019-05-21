@@ -30,7 +30,7 @@ There is no default.
 __path__  
 A notification path.
 
-__options->enabled__  
+__enabled__  
 A checkbox indicating whether or not the associated path is enabled as a trigger.
 Defaults to checked (true).
 

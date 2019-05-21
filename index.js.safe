@@ -60,21 +60,18 @@ module.exports = function(app) {
                 enabledProcesses.reduce((a, {
                     name,
                     enablingpaths,
-                    phases
+                    processpath,
+                    processoptions
                 }) => {
                     var stream = Bacon.combineWith(orAll, enablingpaths.filter(v => v.options.includes("enabled")).map(v => app.streambundle.getSelfStream(v.path).skipDuplicates()));
                     var child = child_process.fork(__dirname + "/process.js");
                     child.on('message', (message) => {
                         if (message.action == 1) {
-                            if (message.path != null) {
-                                log.N(name + ": " + message.name + ": issuing notification: " + message.path);
-                                issueNotificationUpdate(message.path);
-                            }
+                            log.N("starting " + name);
+                            issueNotificationUpdate(processpath);
                         } else {
-                            if (message.path != null) {
-                                log.N(name + ": " + message.name + ": cancelling notification: " + message.path);
-                                cancelNotification(message.path);
-                            }
+                            log.N("stopping " + name);
+                            cancelNotification(processpath);
                         }
                     });
                     child.on('exit', () => {
@@ -89,7 +86,12 @@ module.exports = function(app) {
                                 if (child != null) {
                                     child.send({
                                         "action": "START",
-                                        "phases": phases
+                                        "sdl" : (processoptions.options.includes("start"))?processoptions.start.delay:0,
+                                        "sdr" : (processoptions.options.includes("start"))?processoptions.start.duration:0,
+                                        "idl" : (processoptions.options.includes("iterate"))?processoptions.iterate.delay:0,
+                                        "idr" : (processoptions.options.includes("iterate"))?processoptions.iterate.duration:0,
+                                        "edl" : (processoptions.options.includes("end"))?processoptions.end.delay:0,
+                                        "edr" : (processoptions.options.includes("end"))?processoptions.end.duration:0
                                     });
                                 }
                                 break;
