@@ -1,4 +1,4 @@
-DEPS= readme.md system-requirements.md installation.md usage.md use-cases.md messages.md
+DEPS= readme.md system-requirements.md installation.md usage.md messages.md
 IMGS=*.png
 
 ../README.md: $(DEPS) $(IMGS)

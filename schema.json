@@ -5,7 +5,7 @@
             "title": "Schedule tasks",
             "type": "array",
             "items": {
-                "title": "New task",
+                "title": "Task",
                 "type": "object",
                 "properties": {
                     "name": {
@@ -50,16 +50,17 @@
                                     "type": "string"
                                 },
                                 "delay": {
-                                    "title": "delay (seconds)",
+                                    "title": "delay (s)",
                                     "type": "number"
                                 },
                                 "duration": {
-                                    "title": "duration (seconds)",
+                                    "title": "duration (s)",
                                     "type": "number"
                                 },
                                 "iterate": {
-                                    "title": "iterate",
-                                    "type": "number"
+                                    "title": "iterate (n)",
+                                    "type": "number",
+                                    "minimum": 1
                                 }
                             }
                         }

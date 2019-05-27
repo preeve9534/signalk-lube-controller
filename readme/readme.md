@@ -11,8 +11,8 @@ Signal K notifications into real world actions.
 
 __signalk-process-scheduler__ manages an arbitrary number of user defined
 _tasks_.
-A task is started by the appearance of a nominated ALERT notification on
-the Signal K notification bus and is stopped by the removal of this
+A task is started by the appearance of a nominated ALERT notification in
+the Signal K self notification tree and is stopped by the removal of this
 notification. 
 
 Functionally, a task is composed of one or more sequentially executed
@@ -22,15 +22,17 @@ characterised by a _start event_ which occurs after some time _delay_ and and
 a subsequent _stop event_ which occurs when some _duration_ of time has
 elapsed since the start event.
 The start event is associated with the issuing of an ALERT notification onto
-the Signal K notification bus and the stop event is associated with the
+the Signal K self notification tree and the stop event is associated with the
 removal of this notification.
 The resulting sequence of notification activity can be leveraged to control
 (typically start and stop) external, real world, processes.
 
-By way of illustration: let's imagine a ship with an electrical lubrication
-pump that delivers grease directly to the propeller shaft bearing. 
-We want to ensure that the propeller shaft on our ship is well greased at the
-beginning of every voyage and lightly greased periodically during the voyage.
+## Example application
+
+Imagine a ship with an electrical lubrication pump that delivers grease
+directly to the propeller shaft bearing. 
+We want to ensure that the bearing is well greased at the beginning of every
+voyage and lightly greased periodically during the voyage.
 
 This requirement can be met by a "lubrication" task consisting of two
 activities: a "start" activity which runs once when the main engine is fired
