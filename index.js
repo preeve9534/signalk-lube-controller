@@ -15,8 +15,9 @@
  */
 
 const Bacon = require('baconjs')
-const Schema = require('./lib/schema.js');
-const Log = require('./lib/log.js');
+const Schema = require('./lib/signalk-libschema/Schema.js');
+const Log = require('./lib/signalk-liblog/Log.js');
+const Notification = require('./lib/signalk-libnotification/Notification.js');
 
 const PLUGIN_SCHEMA_FILE = __dirname + "/schema.json";
 const PLUGIN_UISCHEMA_FILE = __dirname + "/uischema.json";
@@ -29,7 +30,8 @@ module.exports = function(app) {
 	plugin.name = "Process scheduler";
 	plugin.description = "Simple process scheduler.";
 
-    const log = new Log(app.setProviderStatus, app.setProviderError, plugin.id);
+    const log = new Log(plugin.id, { ncallback: app.setProviderStatus, ecallback: app.setProviderError });
+    const notification = new Notification(app, plugin.id);
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
     var child_process = require("child_process");
 
@@ -68,12 +70,12 @@ module.exports = function(app) {
                         if (message.action == 1) {
                             if (message.path != null) {
                                 log.N(name + ": " + message.name + ": issuing notification: " + message.path);
-                                issueNotificationUpdate(message.path);
+                                notification.issue(message.path, "Scheduled ON event");
                             }
                         } else {
                             if (message.path != null) {
                                 log.N(name + ": " + message.name + ": cancelling notification: " + message.path);
-                                cancelNotification(message.path);
+                                notification.cancel(message.path);
                             }
                         }
                     });
@@ -110,21 +112,6 @@ module.exports = function(app) {
 	plugin.stop = function() {
 		unsubscribes.forEach(f => f())
 		unsubscribes = []
-	}
-
-    function cancelNotification(npath) {
-		var delta = { "context": "vessels." + app.selfId, "updates": [ { "source": { "label": "self.notificationhandler" }, "values": [ { "path": npath, "value": null } ] } ] };
-		app.handleMessage(plugin.id, delta);
-        return;
-    }
-
-	function issueNotificationUpdate(npath) {
-        var date = (new Date()).toISOString();
-        var notificationValue = { "state": "alert", "message": "Lubrication process", "method": "visual", "date": date };
-		var delta = { "context": "vessels." + app.selfId, "updates": [ { "source": { "label": "self.notificationhandler" }, "values": [ { "path": npath, "value": notificationValue } ] } ] };
-        delta.updates[0].values[0].value = notificationValue;
-		app.handleMessage(plugin.id, delta);
-        return;
 	}
 
     /**
