@@ -30,7 +30,7 @@ module.exports = function(app) {
 	plugin.name = "Process scheduler";
 	plugin.description = "Simple process scheduler.";
 
-    const log = new Log(plugin.id, { ncallback: app.setProviderStatus, ecallback: app.setProviderError });
+    const log = new Log(plugin.id, { ncallback: app.setPluginStatus, ecallback: app.setPluginError });
     const notification = new Notification(app, plugin.id);
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
     var child_process = require("child_process");
@@ -70,7 +70,7 @@ module.exports = function(app) {
                         if (message.action == 1) {
                             if (message.path != null) {
                                 log.N(name + ": " + message.name + ": issuing notification: " + message.path);
-                                notification.issue(message.path, "Scheduled ON event");
+                                notification.issue(message.path, "Scheduled ON event", { state: "alert" });
                             }
                         } else {
                             if (message.path != null) {
