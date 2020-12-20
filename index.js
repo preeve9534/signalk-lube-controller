@@ -122,7 +122,7 @@ module.exports = function(app) {
      */
     function orAll() {
         var retval = false;
-        for (var i = 0; i < arguments.length; i++) { retval |= (arguments[i].state == "alert") };
+        for (var i = 0; i < arguments.length; i++) { retval |= ((arguments[i].state == "alert") || (arguments[i] === 1)) };
         return(retval);
     }
 
