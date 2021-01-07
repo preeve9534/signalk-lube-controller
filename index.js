@@ -26,9 +26,9 @@ module.exports = function(app) {
 	var plugin = {};
 	var unsubscribes = [];
 
-	plugin.id = "process-scheduler";
+	plugin.id = "pdjr-skplugin-process-scheduler";
 	plugin.name = "Process scheduler";
-	plugin.description = "Simple process scheduler.";
+	plugin.description = "Schedule external processes from within Signal K";
 
     const log = new Log(plugin.id, { ncallback: app.setPluginStatus, ecallback: app.setPluginError });
     const notification = new Notification(app, plugin.id);

@@ -1,4 +1,4 @@
-# signalk-process-scheduler
+# pdjr-skplugin-process-scheduler
 
 This [Signal K Node Server](https://github.com/SignalK/signalk-server-node)
 plugin implements a simple process scheduler which uses the Signal K
@@ -9,7 +9,7 @@ To achieve agency in the real world the scheduler is dependent upon other
 plugins which can map real world events into Signal K notifications and
 Signal K notifications into real world actions. 
 
-__signalk-process-scheduler__ manages an arbitrary number of user defined
+__pdjr-skplugin-process-scheduler__ manages an arbitrary number of user defined
 _tasks_.
 A task is started by the appearance of a nominated ALERT notification in
 the Signal K self notification tree and is stopped by the removal of this
@@ -54,7 +54,7 @@ into, say, an NMEA 2000 switchbank relay operation.
 This can be accomplished with a plugin like
 [signalk-switchbank](https://github.com/preeve9534/signalk-switchbank/). 
 
-The raw JSON configuration for a __signalk-process-scheduler__ instance that
+The raw JSON configuration for a __pdjr-skplugin-process-scheduler__ instance that
 handles just a shaft librication task might look like this.
 
 ```
@@ -89,23 +89,23 @@ handles just a shaft librication task might look like this.
 }
 ```
 
-Of course, __signalk-process-scheduler__ provides a convenient web interface
+Of course, __pdjr-skplugin-process-scheduler__ provides a convenient web interface
 for generation of its configuration files.
 ## System requirements
 
-__signalk-process-scheduler__ has no special system requirements.
+__pdjr-skplugin-process-scheduler__ has no special system requirements.
 ## Installation
 
-Download and install __signalk-process-scheduler__ using the _Appstore_ link
+Download and install __pdjr-skplugin-process-scheduler__ using the _Appstore_ link
 in your Signal K Node server console.
 
 The plugin can also be downloaded from the
-[project homepage](https://github.com/preeve9534/signalk-process-scheduler)
+[project homepage](https://github.com/preeve9534/pdjr-skplugin-process-scheduler)
 and installed using
 [these instructions](https://github.com/SignalK/signalk-server-node/blob/master/SERVERPLUGINS.md).
 ## Usage
 
- __signalk-process-scheduler__ is configured through the Signal K Node server
+ __pdjr-skplugin-process-scheduler__ is configured through the Signal K Node server
 plugin configuration interface.
 Navigate to _Server_->_Plugin config_ and select the _Process scheduler_ tab.
 
@@ -166,7 +166,7 @@ __duration__
 The number of seconds for which the controlled process should run.
 ## Messages
 
-__signalk-process-scheduler__ issues the following message to the Signal K
+__pdjr-skplugin-process-scheduler__ issues the following message to the Signal K
 Node server console and system logging facility.
 
 __no processes are defined__  
